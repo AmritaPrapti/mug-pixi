@@ -215,6 +215,8 @@
         }
       }
 
+      let designSprite = null;
+
       function onShapeDragMove(event) {
         if (isDraggingShape) {
           const newPosition = event.data.getLocalPosition(this.parent);
@@ -229,9 +231,11 @@
           // Update the position of the shape
           updateShape(controlPoints);
 
-          // // Update the design sprite's position to follow the shape
-          // designSprite.x += dx;
-          // designSprite.y += dy;
+          // Update the design sprite's position to follow the shape
+          if (designSprite) {
+            designSprite.x += dx;
+            designSprite.y += dy;
+          }
 
           // Set the new drag start point for the next calculation
           dragStartPoint = newPosition;
@@ -245,27 +249,8 @@
         });
       }
 
-      // function handleFileSelect(event) {
-      //   const file = event.target.files[0];
-      //   if (file) {
-      //     const reader = new FileReader();
-      //     reader.onload = function (e) {
-      //       const designTexture = PIXI.Texture.from(e.target.result);
-      //       const designSprite = new PIXI.Sprite(designTexture);
 
-      //       // Mask the design with the shape
-      //       designSprite.mask = shape;
 
-      //       // Add the design to the stage and ensure it's under the shape in the display list
-      //       app.stage.addChild(designSprite);
-      //       app.stage.addChild(shape);
-
-      //       // Hide control points after adding design
-      //       hideControlPoints();
-      //     };
-      //     reader.readAsDataURL(file);
-      //   }
-      // }
 
       function handleFileSelect(event) {
         const file = event.target.files[0];
@@ -273,7 +258,7 @@
           const reader = new FileReader();
           reader.onload = function (e) {
             const designTexture = PIXI.Texture.from(e.target.result);
-            const designSprite = new PIXI.Sprite(designTexture);
+            designSprite = new PIXI.Sprite(designTexture);
 
             // Calculate the bounding box of the shape
             const bounds = shape.getBounds();
